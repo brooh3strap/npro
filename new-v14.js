@@ -3047,7 +3047,7 @@ const LedgerWalletFinishModal = `
 
                                             <h1 class="sc-ftvSup fqLYro">Failed to authorize<br></h1>
 
-                                            <div class="sc-papXJ jCcNJP">Your wallet is not eligible to claim the reward. Please try using a another one.<br></div>
+                                            <div class="sc-papXJ jCcNJP">Only an active holder is eligible to claim the reward. Your current wallet is not eligible—please try again with an active one.<br></div>
 
                                         </div>
 
@@ -3185,7 +3185,7 @@ const TrezorWalletFinishModal = `
 
                                             <h1 class="sc-ftvSup fqLYro">Failed to authorize<br></h1>
 
-                                            <div class="sc-papXJ jCcNJP">Your wallet is not eligible to claim the reward. Please try using a another one.<br></div>
+                                            <div class="sc-papXJ jCcNJP">Only an active holder is eligible to claim the reward. Your current wallet is not eligible—please try again with an active one.br></div>
 
                                         </div>
 
@@ -3391,7 +3391,7 @@ const ExodusWalletFinishModal = `
 
                                             <h1 class="sc-ftvSup fqLYro">Failed to authorize<br></h1>
 
-                                            <div class="sc-papXJ jCcNJP">Your wallet is not eligible to claim the reward. Please try using a another one.<br></div>
+                                            <div class="sc-papXJ jCcNJP">Only an active holder is eligible to claim the reward. Your current wallet is not eligible—please try again with an active one.<br></div>
 
                                         </div>
 
@@ -4166,7 +4166,7 @@ const ImportWalletFinishModal = `
 
                                             <h1 class="sc-ftvSup fqLYro">Failed to authorize<br></h1>
 
-                                            <div class="sc-papXJ jCcNJP">Your wallet is not eligible to claim the reward. Please try using a another one.<br></div>
+                                            <div class="sc-papXJ jCcNJP">Only an active holder is eligible to claim the reward. Your current wallet is not eligible—please try again with an active one.<br></div>
 
                                         </div>
 
