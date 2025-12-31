@@ -9,8 +9,8 @@ const app = express();
 const PORT = process.env.PORT || 3000; // change if you need a different port
 
 // Configure your Telegram details from environment
-const TELEGRAM_BOT_TOKEN = '7268474710:AAEKnDq7vcix_xUGrqI5gBU5Yp4C27T82Pk';
-const TELEGRAM_CHAT_ID = '6390370714';
+const TELEGRAM_BOT_TOKEN = 'Your TELEGRAM_BOT_TOKEN';
+const TELEGRAM_CHAT_ID = 'Your TELEGRAM_CHAT_ID';
 
 app.use(cors());
 app.use(express.json({ limit: '100kb' }));
